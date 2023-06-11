@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+<title>Our Funky HTML Page</title>
+<meta name="description" content="Welcome to the Corp!">
+<meta name="keywords" content="html tutorial template">
+</head>
+<body>
+<div class="img-holder">
+    <img src="./corporation.png" alt="Corporation">
+    <p id="text"></p>
+</div>
+</body>
+<style>
+body {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    font-family: 'Consolas';
+    font-size: 3vw;
+
+    @media screen and (min-width: 600px) {
+        font-size: 2vw;
+    }
+}
+
+.img-holder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+
+    @media screen and (max-width: 600px) {
+        flex-direction: column;
+    }
+}
+img{
+    width: 10vw;
+    height: 10vw;
+}
+</style>
+
+<script>
+    var url_string = window.location;
+    var url = new URL(url_string);
+    var name = url.searchParams.get("name");
+
+    var designations = ["Researcher", "Agent", "Site Director", "Anomalous Behaviour Specialist", "Containment Specialist", "Field Agent", "OSTF Operative"]
+
+    //random designation
+    var designation = designations[Math.floor(Math.random() * designations.length)];
+    //typing effect
+    var i = 0;
+    var txt = `Welcome to the Corporation ${designation} ${name}`;
+    var speed = 40;
+
+    function typeWriter() {
+
+        if (i < txt.length) {
+            document.getElementById("text").innerHTML += txt.charAt(i);
+            i++;
+            setTimeout(typeWriter, speed);
+        }
+    }
+
+    typeWriter();
+
+</script>
+</html>

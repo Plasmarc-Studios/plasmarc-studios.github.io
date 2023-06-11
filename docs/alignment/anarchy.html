@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+<title>WELCOME TO ANARCHY</title>
+<meta name="description" content="Welcome to the Corp!">
+<link rel="stylesheet" href="./anarchy.css">
+</head>
+<body>
+<div class="marquee">
+<span>Chaos was the law of nature; Order was the dream of man.
+    Let a man restore order within himself, and chaos without ceases.
+    Chaos is God’s body. Order is the Devil’s chains.
+    Chaos is more freedom; in fact, total freedom. But no meaning.
+    It was chaos that made them beautiful.</span>
+</div>
+<div class="img-holder">
+    <div id="container">
+        <img src="./anarchy.png" class="glitch" alt="Corporation">
+        <img src="./anarchy.png" class="glitch" alt="Corporation">
+        <img src="./anarchy.png" class="glitch" alt="Corporation">
+    </div>
+    <div id="container">
+        <h1 class="glitch">ANARCHY</h1>
+        <h1 class="glitch">ANARCHY</h1>
+        <h1 class="glitch">ANARCHY</h1>
+    </div> 
+    <p id="text"></p>
+</div>
+<div class="marquee2">
+    <span>Chaos was the law of nature; Order was the dream of man.
+        Let a man restore order within himself, and chaos without ceases.
+        Chaos is God’s body. Order is the Devil’s chains.
+        Chaos is more freedom; in fact, total freedom. But no meaning.
+        It was chaos that made them beautiful.</span>
+    </div>
+</body>
+
+<script>
+    var url_string = window.location;
+    var url = new URL(url_string);
+    var name = url.searchParams.get("name");
+
+    //typing effect
+    var i = 0;
+    var txt = `${name}. Embrace the Chaos. Become the Chaos.`;
+    var speed = 40;
+
+    function typeWriter() {
+
+        if (i < txt.length) {
+            document.getElementById("text").innerHTML += txt.charAt(i);
+            i++;
+            setTimeout(typeWriter, Math.random() * speed);
+        }
+    }
+
+    typeWriter();
+
+</script>
+</html>
