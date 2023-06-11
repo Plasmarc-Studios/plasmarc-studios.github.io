@@ -43,17 +43,17 @@ img{
 </style>
 
 <script>
-    var url_string = window.location;
-    var url = new URL(url_string);
-    var name = url.searchParams.get("name");
+    // var url_string = window.location;
+    // var url = new URL(url_string);
+    // var name = url.searchParams.get("name");
 
-    var designations = ["Researcher", "Agent", "Site Director", "Anomalous Behaviour Specialist", "Containment Specialist", "Field Agent", "OSTF Operative"]
+    // var designations = ["Researcher", "Agent", "Site Director", "Anomalous Behaviour Specialist", "Containment Specialist", "Field Agent", "OSTF Operative"]
 
-    //random designation
-    var designation = designations[Math.floor(Math.random() * designations.length)];
+    // //random designation
+    // var designation = designations[Math.floor(Math.random() * designations.length)];
     //typing effect
     var i = 0;
-    var txt = `Welcome to the Corporation ${designation} ${name}`;
+    var txt = `Welcome to the Corporation`;
     var speed = 40;
 
     function typeWriter() {
