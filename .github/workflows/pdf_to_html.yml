@@ -13,27 +13,29 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Install poppler-utils and pdf2htmlEX
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y poppler-utils
+        sudo apt-get install -y pdf2htmlEX
+
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18'
 
-    - name: Install poppler-utils
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y poppler-utils
-  
     - name: Install dependencies
       run: |
         npm install pdfjs-dist
-  
+
     - name: Convert PDFs to HTML
       run: |
         mkdir -p html_output
         for pdf in anomaly_pdf/*.pdf; do
-        filename=$(basename "$pdf" .pdf)
-        pdf2htmlEX --dest-dir html_output "$pdf"
+          filename=$(basename "$pdf" .pdf)
+          pdf2htmlEX --dest-dir html_output "$pdf"
         done
+
 
     - name: Commit and push HTML files
       run: |
