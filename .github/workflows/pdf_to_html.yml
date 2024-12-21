@@ -13,20 +13,18 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Install poppler-utils and pdf2htmlEX
+    - name: Install poppler-utils
       run: |
         sudo apt-get update
         sudo apt-get install -y poppler-utils
-        sudo apt-get install -y pdf2htmlEX
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-
-    - name: Install dependencies
+    - name: Build pdf2htmlEX from source
       run: |
-        npm install pdfjs-dist
+        git clone https://github.com/coolwanglu/pdf2htmlEX.git
+        cd pdf2htmlEX
+        ./configure
+        make
+        sudo make install
 
     - name: Convert PDFs to HTML
       run: |
@@ -35,7 +33,6 @@ jobs:
           filename=$(basename "$pdf" .pdf)
           pdf2htmlEX --dest-dir html_output "$pdf"
         done
-
 
     - name: Commit and push HTML files
       run: |
