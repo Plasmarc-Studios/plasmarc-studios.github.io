@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - anomaly_pdf/**/*.pdf
+      - gosi_pdf/**/*.pdf
 
 jobs:
   convert-pdf-to-html:
