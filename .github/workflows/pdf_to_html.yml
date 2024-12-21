@@ -1,10 +1,9 @@
-name: Convert PDF to HTML
-
 on:
   push:
     paths:
       - docs/anomaly_pdf/**/*.pdf
       - docs/gosi_pdf/**/*.pdf
+
 
 jobs:
   convert-pdf-to-html:
@@ -14,17 +13,46 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y pdf2htmlex
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
 
-    - name: Convert PDF to HTML
+    - name: Install dependencies
+      run: |
+        npm install pdfjs-dist
+
+    - name: Convert PDFs to HTML
       run: |
         mkdir -p html_output
         for pdf in anomaly_pdf/*.pdf; do
           filename=$(basename "$pdf" .pdf)
-          pdf2htmlEX --dest-dir html_output "$pdf"
+          node -e "
+          const fs = require('fs');
+          const pdfjsLib = require('pdfjs-dist');
+          const data = fs.readFileSync('$pdf');
+          pdfjsLib.getDocument({ data }).promise.then((doc) => {
+              let html = '<html><body>';
+              let pagePromises = [];
+              for (let i = 1; i <= doc.numPages; i++) {
+                  pagePromises.push(
+                      doc.getPage(i).then((page) => {
+                          return page.getTextContent().then((textContent) => {
+                              html += '<div><h1>Page ' + i + '</h1><p>';
+                              textContent.items.forEach((item) => {
+                                  html += item.str + ' ';
+                              });
+                              html += '</p></div>';
+                          });
+                      })
+                  );
+              }
+              Promise.all(pagePromises).then(() => {
+                  html += '</body></html>';
+                  fs.writeFileSync('html_output/' + '$filename.html', html);
+              });
+          });
+          ";
         done
 
     - name: Commit and push HTML files
