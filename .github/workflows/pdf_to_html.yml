@@ -3,8 +3,8 @@ name: Convert PDF to HTML
 on:
   push:
     paths:
-      - anomaly_pdf/**/*.pdf
-      - gosi_pdf/**/*.pdf
+      - docs/anomaly_pdf/**/*.pdf
+      - docs/gosi_pdf/**/*.pdf
 
 jobs:
   convert-pdf-to-html:
