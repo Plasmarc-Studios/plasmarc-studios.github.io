@@ -18,39 +18,22 @@ jobs:
       with:
         node-version: '18'
 
+    - name: Install poppler-utils
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y poppler-utils
+  
     - name: Install dependencies
       run: |
         npm install pdfjs-dist
-
-        - name: Convert PDFs to HTML
-        run: |
-          mkdir -p html_output
-          echo "import fs from 'fs'; import pdfjsLib from 'pdfjs-dist';" > convert.mjs
-          echo "const pdfFiles = fs.readdirSync('./anomaly_pdf').filter(f => f.endsWith('.pdf'));" >> convert.mjs
-          echo "for (const pdfFile of pdfFiles) {" >> convert.mjs
-          echo "  const filePath = './anomaly_pdf/' + pdfFile;" >> convert.mjs
-          echo "  const data = fs.readFileSync(filePath);" >> convert.mjs
-          echo "  pdfjsLib.getDocument({ data }).promise.then(doc => {" >> convert.mjs
-          echo "    let html = '<html><body>';" >> convert.mjs
-          echo "    let promises = [];" >> convert.mjs
-          echo "    for (let i = 1; i <= doc.numPages; i++) {" >> convert.mjs
-          echo "      promises.push(doc.getPage(i).then(page => {" >> convert.mjs
-          echo "        return page.getTextContent().then(textContent => {" >> convert.mjs
-          echo "          html += `<div><h1>Page ${i}</h1><p>`;" >> convert.mjs
-          echo "          textContent.items.forEach(item => html += item.str + ' ');" >> convert.mjs
-          echo "          html += '</p></div>';" >> convert.mjs
-          echo "        });" >> convert.mjs
-          echo "      }));" >> convert.mjs
-          echo "    }" >> convert.mjs
-          echo "    Promise.all(promises).then(() => {" >> convert.mjs
-          echo "      html += '</body></html>';" >> convert.mjs
-          echo "      const outputFileName = `./html_output/${pdfFile.replace('.pdf', '.html')}`;" >> convert.mjs
-          echo "      fs.writeFileSync(outputFileName, html);" >> convert.mjs
-          echo "    });" >> convert.mjs
-          echo "  });" >> convert.mjs
-          echo "}" >> convert.mjs
-          node convert.mjs
   
+    - name: Convert PDFs to HTML
+      run: |
+        mkdir -p html_output
+        for pdf in anomaly_pdf/*.pdf; do
+        filename=$(basename "$pdf" .pdf)
+        pdf2htmlEX --dest-dir html_output "$pdf"
+        done
 
     - name: Commit and push HTML files
       run: |
